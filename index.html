@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PhoneCall Web - Smart Call Log Manager &amp; Contacts. View complete call history, manage contacts, block unwanted numbers, see After-Call Screen, quick call back &amp; more. Fully functional browser simulation of the popular Android app.">
+    <meta name="keywords" content="call log manager web, phone call history, contacts manager browser, call blocker web, after call screen, caller id web, phonecall web, call history app, block numbers online, favorites contacts">
+    <meta name="author" content="SAMER SAEID">
+    <meta name="robots" content="index, follow">
+    <title>PhoneCall Web • Call Log Manager &amp; Contacts</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3 d-flex align-items-center" href="#">
+                <i class="fas fa-phone-volume me-2"></i> PhoneCall
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#logs">Call Logs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacts">Contacts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#favorites">Favorites</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#blocker">Block List</a></li>
+                    <li class="nav-item"><a onclick="showAfterCallDemo()" class="nav-link btn btn-light text-primary px-4 ms-3 fw-semibold" href="#">After-Call Screen</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero py-5 text-white text-center" style="background: linear-gradient(135deg, #0d6efd, #00b894);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <h1 class="display-3 fw-bold mb-3">Smart Call Log Manager</h1>
+                    <p class="lead mb-4 fs-4">Complete call history • Contacts • Block unwanted numbers • After-Call actions.<br>Just like the original Phone Call app — now in your browser.</p>
+                    <button onclick="document.getElementById('logs').scrollIntoView({behavior:'smooth'})" class="btn btn-light btn-lg px-5 py-3 shadow-lg fs-5 fw-semibold">
+                        <i class="fas fa-list-check me-2"></i> VIEW CALL HISTORY
+                    </button>
+                    <div class="mt-4 d-flex justify-content-center gap-3 flex-wrap">
+                        <span class="badge bg-white text-primary fs-6 px-3 py-2"><i class="fas fa-shield-alt me-1"></i> Private &amp; Secure</span>
+                        <span class="badge bg-white text-primary fs-6 px-3 py-2"><i class="fas fa-phone me-1"></i> One-Tap Call Back</span>
+                        <span class="badge bg-white text-primary fs-6 px-3 py-2"><i class="fas fa-ban me-1"></i> Block List</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CALL LOGS SECTION -->
+    <section id="logs" class="py-5 bg-light">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="h3 fw-bold"><i class="fas fa-history me-2"></i> Call Logs</h2>
+                <div class="btn-group">
+                    <button onclick="filterLogs('all')" class="btn btn-outline-primary active" id="filter-all">All</button>
+                    <button onclick="filterLogs('incoming')" class="btn btn-outline-primary" id="filter-incoming">Incoming</button>
+                    <button onclick="filterLogs('outgoing')" class="btn btn-outline-primary" id="filter-outgoing">Outgoing</button>
+                    <button onclick="filterLogs('missed')" class="btn btn-outline-primary" id="filter-missed">Missed</button>
+                </div>
+            </div>
+            <div id="callLogList" class="list-group"></div>
+        </div>
+    </section>
+
+    <!-- CONTACTS SECTION -->
+    <section id="contacts" class="py-5">
+        <div class="container">
+            <h2 class="h3 fw-bold mb-4"><i class="fas fa-address-book me-2"></i> Contacts</h2>
+            <div class="input-group mb-4">
+                <input id="contactSearch" type="text" class="form-control" placeholder="Search contacts by name..." onkeyup="searchContacts()">
+                <button class="btn btn-primary" onclick="searchContacts()"><i class="fas fa-search"></i></button>
+            </div>
+            <div id="contactsList" class="row g-3"></div>
+        </div>
+    </section>
+
+    <!-- FAVORITES SECTION -->
+    <section id="favorites" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="h3 fw-bold mb-4"><i class="fas fa-star me-2"></i> Favorites</h2>
+            <div id="favoritesList" class="row g-3"></div>
+        </div>
+    </section>
+
+    <!-- BLOCK LIST SECTION -->
+    <section id="blocker" class="py-5">
+        <div class="container">
+            <h2 class="h3 fw-bold mb-4"><i class="fas fa-ban me-2"></i> Blocked Numbers</h2>
+            <div id="blockedList" class="list-group"></div>
+            <button onclick="addToBlockList()" class="btn btn-danger mt-4"><i class="fas fa-plus me-2"></i> Add Number to Block List</button>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; Copyright SAMER SAEID. All Rights Reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        Made by ♥️ <a href="https://bio.link/samer" target="_blank" class="text-white text-decoration-underline">SAMER SAEID</a>
+                    </p>
+                </div>
+            </div>
+            <div class="text-center mt-4 small text-muted">
+                SEO Optimized • 100% Responsive • Works on Desktop, Mobile &amp; Tablet
+            </div>
+        </div>
+    </footer>
+
+    <!-- AFTER-CALL DEMO MODAL -->
+    <div class="modal fade" id="afterCallModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">📞 After-Call Screen</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4 id="demoCallerName" class="fw-bold">John Doe</h4>
+                    <p class="text-muted" id="demoCallerNumber">+1 (555) 123-4567 • 2:34 min</p>
+                    <div class="d-grid gap-3 mt-4">
+                        <button onclick="demoAction('call')" class="btn btn-success"><i class="fas fa-phone me-2"></i> Call Back</button>
+                        <button onclick="demoAction('message')" class="btn btn-primary"><i class="fas fa-comment me-2"></i> Send Message</button>
+                        <button onclick="demoAction('save')" class="btn btn-outline-primary"><i class="fas fa-user-plus me-2"></i> Save to Contacts</button>
+                        <button onclick="demoAction('block')" class="btn btn-danger"><i class="fas fa-ban me-2"></i> Block Number</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+</html>
